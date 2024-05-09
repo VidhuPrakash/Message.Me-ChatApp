@@ -29,13 +29,13 @@ export const login = async (req, res) => {
 
 export const signup = async (req, res) => {
   try {
-    const { fullName, userName, Password, confirmPassword, gender } = req.body;
+    const { fullname, username, password, confirmPassword, gender } = req.body;
 
-    if (Password !== confirmPassword) {
+    if (password !== confirmPassword) {
       return res.status(400).json({ error: "Passwords do not match" });
     }
 
-    const user = await User.findOne({ userName });
+    const user = await User.findOne({ username });
 
     if (user) {
       return res.status(400).json({ error: "Username already exists." });
@@ -43,14 +43,14 @@ export const signup = async (req, res) => {
 
     // HASH Password
     const salt = await bcryptjs.genSalt(15);
-    const hashedpassword = await bcryptjs.hash(Password, salt);
+    const hashedpassword = await bcryptjs.hash(password, salt);
 
-    const boyProfile = `https://avatar.iran.liara.run/public/boy?username=${userName}`;
-    const girlProfile = `https://avatar.iran.liara.run/public/girl?username=${userName}`;
+    const boyProfile = `https://avatar.iran.liara.run/public/boy?username=${username}`;
+    const girlProfile = `https://avatar.iran.liara.run/public/girl?username=${username}`;
 
     const newUser = new User({
-      fullName: fullName,
-      userName: userName,
+      fullName: fullname,
+      userName: username,
       password: hashedpassword,
       gender: gender,
       profilePic: gender === "male" ? boyProfile : girlProfile,
@@ -63,8 +63,8 @@ export const signup = async (req, res) => {
 
       res.status(201).json({
         _id: newUser.id,
-        fullName: newUser.fullName,
-        userName: newUser.userName,
+        fullname: newUser.fullName,
+        username: newUser.userName,
         profilePic: newUser.profilePic,
       });
     } else {
