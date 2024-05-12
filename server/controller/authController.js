@@ -4,10 +4,11 @@ import generateTokenAndSetCookie from "../utils/generateToken.js";
 
 export const login = async (req, res) => {
   try {
-    const { userName, Password } = req.body;
+    const { username: userName, password } = req.body;
     const user = await User.findOne({ userName });
+    console.log(user?.password);
     const isPasswordCorrect = await bcryptjs.compare(
-      Password,
+      password,
       user?.password || ""
     );
 
@@ -17,8 +18,8 @@ export const login = async (req, res) => {
     generateTokenAndSetCookie(user._id, res);
     res.status(201).json({
       _id: user.id,
-      fullName: user.fullName,
-      userName: user.userName,
+      fullname: user.fullName,
+      username: user.userName,
       profilePic: user.profilePic,
     });
   } catch (error) {
@@ -71,6 +72,9 @@ export const signup = async (req, res) => {
       res.status(400).json({ error: "Invalid userdata" });
     }
   } catch (error) {
+    if (error.code === 11000 && error.keyPattern?.userName) {
+      return res.status(400).json({ error: "Username already exists." });
+    }
     console.log("Error  in Sign Up controller", error.message);
     res.status(500).json({ error: "Internel Server Error!" });
   }
