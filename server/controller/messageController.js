@@ -54,6 +54,10 @@ export const getMessage = async (req, res) => {
     }
     const messages = conversation.messages;
 
+    if (!messages || messages.length === 0) {
+      return res.status(200).json([]); // Return an empty array if no messages found
+    }
+
     res.status(200).json(messages);
   } catch (error) {
     console.log("Error in getMessage controller", error.message);
