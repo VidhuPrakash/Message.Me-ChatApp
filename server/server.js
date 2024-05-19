@@ -6,8 +6,8 @@ import userRoutes from "./routes/user.routes.js";
 
 import connectTomongoDB from "./Database/connectToMongodb.js";
 import cookieParser from "cookie-parser";
+import { app, server } from "./socket/socket.js";
 
-const app = express();
 const PORT = process.env.PORT || 5000;
 
 dotenv.config();
@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
   res.send("Server says Hello World!!");
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   connectTomongoDB();
   console.log(`Server Running on port ${PORT}`);
 });

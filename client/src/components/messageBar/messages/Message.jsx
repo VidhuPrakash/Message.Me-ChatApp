@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import useConversation from "../../../zustand-store/useConversation";
 import { useAuthContext } from "../../../context/AuthContext";
 import extractTime from "../../../utils/extractTime";
@@ -14,6 +14,7 @@ const Message = ({ message }) => {
     ? authUser?.profilePic
     : selectedConversation?.profilePic;
   const bubbleBgColor = fromMe ? "bg-red-500" : "";
+
   return (
     <div className={`chat ${selectClass}`}>
       <div className="chat-image avatar">

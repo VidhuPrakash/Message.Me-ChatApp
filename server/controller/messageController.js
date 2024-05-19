@@ -1,5 +1,6 @@
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const sendMessage = async (req, res) => {
   try {
@@ -27,13 +28,20 @@ export const sendMessage = async (req, res) => {
       conversation.messages.push(newMessage._id);
     }
 
-    // socket io funtionality
-
     // await conversation.save();
     // await newMessage.save();
 
     // this will run parallel
     await Promise.all([conversation.save(), newMessage.save()]);
+
+    // socket io funtionality
+
+    const receiverSocktId = getReceiverSocketId(receiverId);
+    if (receiverSocktId) {
+      // io.to(socketID).emit() used to send events to specific client
+      io.to(receiverSocktId).emit("newMessage", newMessage);
+    }
+
     res.status(201).json(newMessage);
   } catch (error) {
     console.log("Error in sendMessage controller", error.message);

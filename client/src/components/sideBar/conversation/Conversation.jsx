@@ -1,11 +1,15 @@
 import React from "react";
 import useConversation from "../../../zustand-store/useConversation";
+import { useSocketContext } from "../../../context/socketContext";
 
 const Conversation = ({ conversation }) => {
   const { selectedConversation, setSelectedConversation } = useConversation();
 
   const isSelected =
     selectedConversation && selectedConversation._id === conversation._id;
+
+  const { onlineUsers } = useSocketContext();
+  const isOnline = onlineUsers.includes(conversation._id);
 
   const handleClick = () => {
     setSelectedConversation(conversation); // Refresh selectedConversation when clicking a new conversation
@@ -18,7 +22,7 @@ const Conversation = ({ conversation }) => {
       `}
         onClick={handleClick}
       >
-        <div className="avatar online">
+        <div className={`avatar ${isOnline ? "online" : "offline"}`}>
           <div className="w-12 rounded-full">
             <img src={conversation.profilePic} alt="avatar" />
           </div>
