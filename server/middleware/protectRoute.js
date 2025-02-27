@@ -1,6 +1,22 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
+/**
+ * Middleware function to protect routes by verifying JWT token.
+ * 
+ * This function checks for the presence of a JWT token in the cookies.
+ * If the token is missing or invalid, it responds with an unauthorized error.
+ * If the token is valid, it decodes the token to retrieve the user ID, fetches
+ * the user from the database (excluding the password), and attaches the user
+ * data to the request object. If the user is not found, it responds with a
+ * "User not found" error. If any error occurs during the process, it logs the
+ * error and responds with an internal server error.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ */
+
 const protectRoute = async (req, res, next) => {
   try {
     const token = req.cookies.jwt;

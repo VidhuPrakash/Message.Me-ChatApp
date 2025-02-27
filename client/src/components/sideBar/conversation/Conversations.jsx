@@ -6,9 +6,18 @@ const Conversations = () => {
   const { loading, conversation } = useGetConversation();
   return (
     <div className="py-2 flex flex-col overflow-auto">
-      {conversation.map((conversations) => (
-        <Conversation key={conversations._id} conversation={conversations} />
-      ))}
+      {conversation.length === 0 ? (
+        <div className="flex items-center justify-center">No users</div>
+      ) : (
+        <>
+          {conversation.map((conversations) => (
+            <Conversation
+              key={conversations._id}
+              conversation={conversations}
+            />
+          ))}
+        </>
+      )}
       {loading ? <span className="loading loading-dots mx-auto"></span> : null}
     </div>
   );

@@ -2,6 +2,34 @@ import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import generateTokenAndSetCookie from "../utils/generateToken.js";
 
+/**
+ * @api {post} /login Login
+ * @apiName Login
+ * @apiGroup Auth
+ * @apiDescription Logs the user in using username and password.
+ *
+ * @apiParam {String} username The username of the user.
+ * @apiParam {String} password The password of the user.
+ *
+ * @apiSuccess {String} _id The id of the user
+ * @apiSuccess {String} fullname The full name of the user
+ * @apiSuccess {String} username The username of the user
+ * @apiSuccess {String} profilePic The URL of the profile picture of the user
+ *
+ * @apiError {String} error The error message.
+ *
+ * @apiErrorExample {json} Invalid username or password
+ * HTTP/1.1 400 Bad Request
+ * {
+ *   "error": "Invalid username or password"
+ * }
+ *
+ * @apiErrorExample {json} Internal Server Error
+ * HTTP/1.1 500 Internal Server Error
+ * {
+ *   "error": "Internel Server Error!"
+ * }
+ */
 export const login = async (req, res) => {
   try {
     const { username: userName, password } = req.body;
@@ -27,6 +55,43 @@ export const login = async (req, res) => {
   }
 };
 
+/**
+ * @api {post} /signup Signup
+ * @apiName Signup
+ * @apiGroup Auth
+ * @apiDescription Creates a new user account.
+ *
+ * @apiParam {String} fullname The full name of the user.
+ * @apiParam {String} username The username of the user.
+ * @apiParam {String} password The password of the user.
+ * @apiParam {String} confirmPassword The confirmation of the password of the user.
+ * @apiParam {String} gender The gender of the user.
+ *
+ * @apiSuccess {String} _id The id of the user
+ * @apiSuccess {String} fullname The full name of the user
+ * @apiSuccess {String} username The username of the user
+ * @apiSuccess {String} profilePic The URL of the profile picture of the user
+ *
+ * @apiError {String} error The error message.
+ *
+ * @apiErrorExample {json} Invalid userdata
+ * HTTP/1.1 400 Bad Request
+ * {
+ *   "error": "Invalid userdata"
+ * }
+ *
+ * @apiErrorExample {json} Username already exists
+ * HTTP/1.1 400 Bad Request
+ * {
+ *   "error": "Username already exists."
+ * }
+ *
+ * @apiErrorExample {json} Internal Server Error
+ * HTTP/1.1 500 Internal Server Error
+ * {
+ *   "error": "Internel Server Error!"
+ * }
+ */
 export const signup = async (req, res) => {
   try {
     const { fullname, username, password, confirmPassword, gender } = req.body;
@@ -78,6 +143,23 @@ export const signup = async (req, res) => {
     res.status(500).json({ error: "Internel Server Error!" });
   }
 };
+
+/**
+ * @api {post} /logout Logout
+ * @apiName Logout
+ * @apiGroup Auth
+ * @apiDescription Logs the user out by clearing the JWT cookie.
+ *
+ * @apiSuccess {String} message A success message.
+ *
+ * @apiError {String} error The error message.
+ *
+ * @apiErrorExample {json} Internal Server Error
+ * HTTP/1.1 500 Internal Server Error
+ * {
+ *   "error": "Internel Server Error!"
+ * }
+ */
 
 export const logout = async (req, res) => {
   try {
