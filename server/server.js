@@ -3,14 +3,15 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.routes.js";
 import messagesRoutes from "./routes/messages.routes.js";
 import userRoutes from "./routes/user.routes.js";
-
+import cors from "cors";
+dotenv.config();
 import connectTomongoDB from "./Database/connectToMongodb.js";
 import cookieParser from "cookie-parser";
 import { app, server } from "./socket/socket.js";
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
-dotenv.config();
+app.use(cors({ origin: process.env.CLIENT_URI, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
